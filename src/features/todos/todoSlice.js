@@ -22,13 +22,19 @@ const todo = createSlice({
       })
       .addCase(getTodo.fulfilled, (state, action) => {
         state.status = "successed";
-        state.todo = action.payload;
+        const todo = action.payload;
+        todo.sort((a, b) => b.id - a.id);
+        state.todo = todo;
       })
       .addCase(getTodo.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
       .addCase(addTodo.fulfilled, (state, action) => {
+        const todo = state.todo;
+        todo.push(action.payload);
+        todo.sort((a, b) => b.id - a.id);
+        state.todo = todo;
         console.log(action.payload);
       });
   },
