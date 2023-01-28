@@ -36,6 +36,18 @@ const todo = createSlice({
         todo.sort((a, b) => b.id - a.id);
         state.todo = todo;
         console.log(action.payload);
+      })
+      .addCase(updateTodo.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Update could not complete");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload;
+        let todo = state.todo.filter((item) => item.id !== id);
+        todo.push(action.payload);
+        todo.sort((a, b) => b.id - a.id);
+        state.todo = todo;
       });
   },
 });
@@ -56,6 +68,20 @@ export const addTodo = createAsyncThunk("todos/addTodo", async (todo) => {
       "https://z0o0wo-3500.preview.csb.app/todos",
       todo
     );
+    return result.data;
+  } catch (e) {
+    return e.message;
+  }
+});
+
+export const updateTodo = createAsyncThunk("todos/updateTodo", async (todo) => {
+  try {
+    const { id } = todo;
+    let result = await axios.put(
+      `https://z0o0wo-3500.preview.csb.app/todos/${id}`,
+      todo
+    );
+    console.log(result.data);
     return result.data;
   } catch (e) {
     return e.message;

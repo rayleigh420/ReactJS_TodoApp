@@ -8,6 +8,7 @@ import {
   getTodoError,
   getTodoStatus,
   selectAllTodo,
+  updateTodo,
 } from "./todoSlice";
 import AddTodoForm from "./AddTodoForm";
 
@@ -24,7 +25,10 @@ const TodoList = () => {
     }
   }, [todoStatus, dispatch]);
 
-  const updateTodo = () => {};
+  const changeComplete = (todo) => {
+    console.log(todo);
+    dispatch(updateTodo(todo));
+  };
 
   let content;
   if (todoStatus == "loading") {
@@ -39,7 +43,7 @@ const TodoList = () => {
               checked={todo.completed}
               id={todo.id}
               onChange={() =>
-                updateTodo({ ...todo, completed: !todo.completed })
+                changeComplete({ ...todo, completed: !todo.completed })
               }
             />
             <label htmlFor={todo.id}>{todo.title}</label>
@@ -58,7 +62,6 @@ const TodoList = () => {
     <main>
       <h1>Todo List</h1>
       <AddTodoForm />
-      {/* {newItemSection} */}
       {content}
     </main>
   );
