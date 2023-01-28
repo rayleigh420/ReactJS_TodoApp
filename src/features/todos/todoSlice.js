@@ -90,7 +90,7 @@ export const updateTodo = createAsyncThunk("todos/updateTodo", async (todo) => {
       `https://z0o0wo-3500.preview.csb.app/todos/${id}`,
       todo
     );
-    console.log(result.data);
+    return result.data;
   } catch (e) {
     return e.message;
   }
