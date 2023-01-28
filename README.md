@@ -1,2 +1,3 @@
 # ReactJS_TodoApp
-Created with CodeSandbox
+
+Use Redux Toolkit and Redux Thunk to store data and call api
