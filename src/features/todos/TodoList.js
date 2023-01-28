@@ -2,19 +2,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   fetchTodo,
   getTodoError,
   getTodoStatus,
   selectAllTodo,
 } from "./todoSlice";
+import AddTodoForm from "./AddTodoForm";
 
 const TodoList = () => {
   const [newTodo, setNewTodo] = useState("");
-  // const [todo, setTodo] = useState([]);
-  // const isLoading = false;
-  // const isSuccess = false;
-  // const isError = false;
 
   const dispatch = useDispatch();
 
@@ -28,28 +26,29 @@ const TodoList = () => {
     }
   }, [todoStatus, dispatch]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // console.log(123);
-    // console.log(result.data);
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  // };
 
-  const newItemSection = (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="new-todo">Enter a new todo item</label>
-      <div className="new-todo">
-        <input
-          type="text"
-          id="new-todo"
-          placeholder="Enter new todo"
-          value={newTodo}
-        />
-      </div>
-      <button className="submit">
-        <FontAwesomeIcon icon={faUpload} />
-      </button>
-    </form>
-  );
+  // const changeTodo = (e) => setNewTodo(e.target.value);
+
+  // const newItemSection = (
+  //   <form onSubmit={handleSubmit}>
+  //     <label htmlFor="new-todo">Enter a new todo item</label>
+  //     <div className="new-todo">
+  //       <input
+  //         type="text"
+  //         id="new-todo"
+  //         placeholder="Enter new todo"
+  //         value={newTodo}
+  //         onChange={changeTodo}
+  //       />
+  //     </div>
+  //     <button className="submit">
+  //       <FontAwesomeIcon icon={faUpload} />
+  //     </button>
+  //   </form>
+  // );
 
   let content;
   if (todoStatus == "loading") {
@@ -81,7 +80,8 @@ const TodoList = () => {
   return (
     <main>
       <h1>Todo List</h1>
-      {newItemSection}
+      <AddTodoForm />
+      {/* {newItemSection} */}
       {content}
     </main>
   );

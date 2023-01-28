@@ -31,17 +31,14 @@ const todo = createSlice({
   },
 });
 
-export const fetchTodo = createAsyncThunk(
-  "todos/fetchTodo",
-  async (params, thunkAPI) => {
-    try {
-      let result = await axios.get("https://z0o0wo-3500.preview.csb.app/todos");
-      return result.data;
-    } catch (e) {
-      return e.message;
-    }
+export const fetchTodo = createAsyncThunk("todos/fetchTodo", async () => {
+  try {
+    let result = await axios.get("https://z0o0wo-3500.preview.csb.app/todos");
+    return result.data;
+  } catch (e) {
+    return e.message;
   }
-);
+});
 
 export const selectAllTodo = (state) => state.todo.todo;
 export const getTodoStatus = (state) => state.todo.status;
