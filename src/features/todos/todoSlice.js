@@ -1,11 +1,19 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = {
-  todo: [],
+const todosAdapter = createEntityAdapter({
+  sortComparer: (a, b) => a.title.localeCompare(b.title),
+});
+
+const initialState = todosAdapter.getInitialState({
   status: "idle",
   error: null,
-};
+});
 
 const todo = createSlice({
   name: "todos",
@@ -23,18 +31,21 @@ const todo = createSlice({
       .addCase(getTodo.fulfilled, (state, action) => {
         state.status = "successed";
         const todo = action.payload;
-        todo.sort((a, b) => b.id - a.id);
-        state.todo = todo;
+        // const todo = action.payload;
+        // todo.sort((a, b) => b.id - a.id);
+        // state.todo = todo;
+        todosAdapter.upsertMany(state, todo);
       })
       .addCase(getTodo.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
       .addCase(addTodo.fulfilled, (state, action) => {
-        const todo = state.todo;
-        todo.push(action.payload);
-        todo.sort((a, b) => b.id - a.id);
-        state.todo = todo;
+        // const todo = state.todo;
+        // todo.push(action.payload);
+        // todo.sort((a, b) => b.id - a.id);
+        // state.todo = todo;
+        todosAdapter.addOne(state, action.payload);
       })
       .addCase(updateTodo.fulfilled, (state, action) => {
         if (!action.payload?.id) {
@@ -42,11 +53,12 @@ const todo = createSlice({
           console.log(action.payload);
           return;
         }
-        const { id } = action.payload;
-        let todo = state.todo.filter((item) => item.id !== id);
-        todo.push(action.payload);
-        todo.sort((a, b) => b.id - a.id);
-        state.todo = todo;
+        // const { id } = action.payload;
+        // let todo = state.todo.filter((item) => item.id !== id);
+        // todo.push(action.payload);
+        // todo.sort((a, b) => b.id - a.id);
+        // state.todo = todo;
+        todosAdapter.upsertOne(state, action.payload);
       })
       .addCase(deleteTodo.fulfilled, (state, action) => {
         if (!action.payload?.id) {
@@ -55,8 +67,9 @@ const todo = createSlice({
           return;
         }
         const { id } = action.payload;
-        const todo = state.todo.filter((item) => item.id !== id);
-        state.todo = todo;
+        // const todo = state.todo.filter((item) => item.id !== id);
+        // state.todo = todo;
+        todosAdapter.removeOne(state, id);
       });
   },
 });
@@ -109,7 +122,12 @@ export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (todo) => {
   }
 });
 
-export const selectAllTodo = (state) => state.todo.todo;
+// export const selectAllTodo = (state) => state.todo.todo;
+
+export const { selectAll: selectAllTodo } = todosAdapter.getSelectors(
+  (state) => state.todo
+);
+
 export const getTodoStatus = (state) => state.todo.status;
 export const getTodoError = (state) => state.todo.error;
 
