@@ -9,6 +9,7 @@ import {
   getTodoStatus,
   selectAllTodo,
   updateTodo,
+  deleteTodo,
 } from "./todoSlice";
 import AddTodoForm from "./AddTodoForm";
 
@@ -30,6 +31,10 @@ const TodoList = () => {
     dispatch(updateTodo(todo));
   };
 
+  const deleteTodos = (todo) => {
+    dispatch(deleteTodo(todo));
+  };
+
   let content;
   if (todoStatus == "loading") {
     content = <p>Loading...</p>;
@@ -48,7 +53,7 @@ const TodoList = () => {
             />
             <label htmlFor={todo.id}>{todo.title}</label>
           </div>
-          <button className="trash">
+          <button className="trash" onClick={() => deleteTodos(todo)}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
         </article>

@@ -35,7 +35,6 @@ const todo = createSlice({
         todo.push(action.payload);
         todo.sort((a, b) => b.id - a.id);
         state.todo = todo;
-        console.log(action.payload);
       })
       .addCase(updateTodo.fulfilled, (state, action) => {
         if (!action.payload?.id) {
@@ -47,6 +46,16 @@ const todo = createSlice({
         let todo = state.todo.filter((item) => item.id !== id);
         todo.push(action.payload);
         todo.sort((a, b) => b.id - a.id);
+        state.todo = todo;
+      })
+      .addCase(deleteTodo.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Delete could not complete");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload;
+        const todo = state.todo.filter((item) => item.id !== id);
         state.todo = todo;
       });
   },
@@ -82,7 +91,19 @@ export const updateTodo = createAsyncThunk("todos/updateTodo", async (todo) => {
       todo
     );
     console.log(result.data);
-    return result.data;
+  } catch (e) {
+    return e.message;
+  }
+});
+
+export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (todo) => {
+  try {
+    const { id } = todo;
+    let result = await axios.delete(
+      `https://z0o0wo-3500.preview.csb.app/todos/${id}`
+    );
+    if (result?.status === 200) return todo;
+    return `${result?.status}: ${result?.statusText}`;
   } catch (e) {
     return e.message;
   }
