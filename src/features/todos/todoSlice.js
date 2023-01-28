@@ -17,23 +17,39 @@ const todo = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTodo.pending, (state, action) => {
+      .addCase(getTodo.pending, (state, action) => {
         state.status = "loading";
       })
-      .addCase(fetchTodo.fulfilled, (state, action) => {
+      .addCase(getTodo.fulfilled, (state, action) => {
         state.status = "successed";
         state.todo = action.payload;
       })
-      .addCase(fetchTodo.rejected, (state, action) => {
+      .addCase(getTodo.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(addTodo.fulfilled, (state, action) => {
+        console.log(action.payload);
       });
   },
 });
 
-export const fetchTodo = createAsyncThunk("todos/fetchTodo", async () => {
+export const getTodo = createAsyncThunk("todos/getTodo", async () => {
   try {
     let result = await axios.get("https://z0o0wo-3500.preview.csb.app/todos");
+    return result.data;
+  } catch (e) {
+    return e.message;
+  }
+});
+
+export const addTodo = createAsyncThunk("todos/addTodo", async (todo) => {
+  try {
+    console.log(todo);
+    let result = await axios.post(
+      "https://z0o0wo-3500.preview.csb.app/todos",
+      todo
+    );
     return result.data;
   } catch (e) {
     return e.message;

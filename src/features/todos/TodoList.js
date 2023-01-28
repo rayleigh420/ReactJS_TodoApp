@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-  fetchTodo,
+  getTodo,
   getTodoError,
   getTodoStatus,
   selectAllTodo,
@@ -12,8 +12,6 @@ import {
 import AddTodoForm from "./AddTodoForm";
 
 const TodoList = () => {
-  const [newTodo, setNewTodo] = useState("");
-
   const dispatch = useDispatch();
 
   const todos = useSelector(selectAllTodo);
@@ -22,40 +20,17 @@ const TodoList = () => {
 
   useEffect(() => {
     if (todoStatus == "idle") {
-      dispatch(fetchTodo());
+      dispatch(getTodo());
     }
   }, [todoStatus, dispatch]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  // };
-
-  // const changeTodo = (e) => setNewTodo(e.target.value);
-
-  // const newItemSection = (
-  //   <form onSubmit={handleSubmit}>
-  //     <label htmlFor="new-todo">Enter a new todo item</label>
-  //     <div className="new-todo">
-  //       <input
-  //         type="text"
-  //         id="new-todo"
-  //         placeholder="Enter new todo"
-  //         value={newTodo}
-  //         onChange={changeTodo}
-  //       />
-  //     </div>
-  //     <button className="submit">
-  //       <FontAwesomeIcon icon={faUpload} />
-  //     </button>
-  //   </form>
-  // );
+  const updateTodo = () => {};
 
   let content;
   if (todoStatus == "loading") {
     content = <p>Loading...</p>;
   } else if (todoStatus == "successed") {
     content = todos.map((todo) => {
-      //JSON.stringify(todos)
       return (
         <article key={todo.id}>
           <div className="todo">
@@ -63,7 +38,9 @@ const TodoList = () => {
               type="checkbox"
               checked={todo.completed}
               id={todo.id}
-              // onChange={() => updateTodo({ ...todo, completed: !todo.completed })}
+              onChange={() =>
+                updateTodo({ ...todo, completed: !todo.completed })
+              }
             />
             <label htmlFor={todo.id}>{todo.title}</label>
           </div>

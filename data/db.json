@@ -1169,6 +1169,24 @@
       "title": "Another new todo!",
       "completed": false,
       "id": 201
+    },
+    {
+      "userId": 1,
+      "id": 1000,
+      "title": "newTodo",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "title": "le nhat duy",
+      "completed": false,
+      "id": 1001
+    },
+    {
+      "userId": 1,
+      "title": "le nhat duy",
+      "completed": false,
+      "id": 1002
     }
   ]
 }
